@@ -15,7 +15,7 @@ const Register = () => {
 
     const changeInputHandler = (e) => {
         setUserData(prevState => {
-            return {...prevState, [e.target.name]: e.target.value}
+            return { ...prevState, [e.target.name]: e.target.value }
         })
     }
 
@@ -25,7 +25,7 @@ const Register = () => {
         try {
             const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/users/register`, userData)
             const newUser = await response.data;
-            if(!newUser) {
+            if (!newUser) {
                 setError("Couldn't register user. Please try again.")
             }
             navigate('/login')
@@ -41,7 +41,7 @@ const Register = () => {
                 <h2>Sign Up</h2>
                 <form onSubmit={registerUser} className='form register__form'>
                     {error && <p className='form__error-message'>{error}</p>}
-                    <input type="text" placeholder='Full Name' name="name" value={userData.name} onChange={changeInputHandler} autoFocus/>
+                    <input type="text" placeholder='Full Name' name="name" value={userData.name} onChange={changeInputHandler} autoFocus />
                     <input type="email" placeholder='Email' name="email" value={userData.email} onChange={changeInputHandler} />
                     <input type="password" placeholder='Password' name="password" value={userData.password} onChange={changeInputHandler} />
                     <input type="password" placeholder='Confirm Password' name="password2" value={userData.password2} onChange={changeInputHandler} />

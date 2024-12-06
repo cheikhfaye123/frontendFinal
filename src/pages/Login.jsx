@@ -5,15 +5,15 @@ import axios from "axios"
 import { UserContext } from '../context/userContext'
 
 const Login = () => {
-    const [userData, setUserData] = useState({email: "", password: ""})
+    const [userData, setUserData] = useState({ email: "", password: "" })
     const [error, setError] = useState('')
     const navigate = useNavigate()
 
-    const {setCurrentUser} = useContext(UserContext)
+    const { setCurrentUser } = useContext(UserContext)
 
     const changeHandler = (e) => {
         setUserData(prevState => {
-            return {...prevState, [e.target.name]: e.target.value}
+            return { ...prevState, [e.target.name]: e.target.value }
         })
     }
 
@@ -23,10 +23,10 @@ const Login = () => {
         try {
             const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/users/login`, userData);
             const user = await response.data;
-            if(!user) {
+            if (!user) {
                 setError("Please check your credentials.")
             }
-            
+
             setCurrentUser(user)
             navigate("/")
         } catch (err) {
