@@ -3,10 +3,6 @@ import PostItem from './PostItem'
 import axios from 'axios'
 import Loader from './Loader';
 
-
-
-
-
 const Posts = () => {
   const [posts, setPosts] = useState([])
   const [isLoading, setIsLoading] = useState(false);
@@ -15,17 +11,19 @@ const Posts = () => {
     const fetchPosts = async () => {
       setIsLoading(true)
       try {
-        const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/posts`);
+        const response = await axios.get(`${process.env.REACT_APP_BASE_URL.replace('/api', '')}/api/posts`, {
+          withCredentials: true
+        });
         setPosts(response?.data)
       } catch (error) {
-        console.log(error)
+        console.error('Erreur de chargement des posts:', error)
+      } finally {
+        setIsLoading(false)
       }
-      setIsLoading(false)
     }
 
     fetchPosts();
   }, [])
-
 
   if (isLoading) {
     return <Loader />

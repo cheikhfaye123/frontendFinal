@@ -1,21 +1,17 @@
-import React, { useContext, useEffect } from 'react'
+import { useContext, useEffect } from 'react'
 import { UserContext } from '../context/userContext'
 import { useNavigate } from 'react-router-dom'
-import axios from 'axios'
 
 const Logout = () => {
-  const { currentUser, setCurrentUser } = useContext(UserContext)
+  const { setCurrentUser } = useContext(UserContext)
+  const navigate = useNavigate()
 
   useEffect(() => {
-
     setCurrentUser(null)
-  }, [])
+    navigate('/login')
+  }, [setCurrentUser, navigate])
 
-  const navigate = useNavigate()
-  navigate('/login')
-  return (
-    <div></div>
-  )
+  return null
 }
 
 export default Logout
