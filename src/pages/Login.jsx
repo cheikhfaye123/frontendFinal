@@ -23,7 +23,11 @@ const Login = () => {
         setIsLoading(true)
 
         try {
-            const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/users/login`,
+            console.log("Tentative de connexion à:", `${process.env.REACT_APP_BASE_URL}/users/login`);
+            console.log("Données envoyées:", userData);
+
+            const response = await axios.post(
+                `${process.env.REACT_APP_BASE_URL}/users/login`,
                 userData,
                 {
                     headers: {
@@ -32,19 +36,21 @@ const Login = () => {
                 }
             );
 
+            console.log("Réponse:", response);
             const user = response.data;
+
             if (!user) {
-                setError("Please check your credentials.")
+                setError("Vérifiez vos identifiants");
                 return;
             }
 
-            setCurrentUser(user)
-            navigate("/")
+            setCurrentUser(user);
+            navigate("/");
         } catch (err) {
-            console.error('Erreur de connexion:', err);
-            setError(err?.response?.data?.message || "Une erreur s'est produite lors de la connexion");
+            console.error("Erreur complète:", err);
+            setError(err?.response?.data?.message || "Erreur de connexion");
         } finally {
-            setIsLoading(false)
+            setIsLoading(false);
         }
     }
 
