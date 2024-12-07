@@ -55,16 +55,19 @@ const CreatePost = () => {
 
         try {
             const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/posts`, postData, {
-                withCredentials: true, headers: { Authorization: `Bearer ${token}` }
+                headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'multipart/form-data' }
             })
             if (response.status == 201) {
                 return navigate('/')
             }
         } catch (err) {
-            if (err.response.data.message === "TypeError: Cannot read properties of null (reading 'thumbnail')") {
-                setError("Please choose a thumbnail")
-            } else {
-                setError(err.response.data.message);
+            if (err?.response?.data.message) {
+                setError(err.response.data.message)
+            } else if (!thumbnail) {
+                setError("Please choose a thumbnail");
+            }
+            else {
+                setError("erreur en creant un post. Please try again")
             }
         }
     }
