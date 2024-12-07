@@ -11,14 +11,12 @@ const Posts = () => {
     const fetchPosts = async () => {
       setIsLoading(true)
       try {
-        const response = await axios.get(`${process.env.REACT_APP_BASE_URL.replace('/api', '')}/api/posts`, {
-          withCredentials: true
-        });
-        setPosts(response?.data)
+        const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/posts`);
+        setPosts(response?.data);
       } catch (error) {
-        console.error('Erreur de chargement des posts:', error)
+        console.error('Erreur de chargement des posts:', error);
       } finally {
-        setIsLoading(false)
+        setIsLoading(false);
       }
     }
 
@@ -33,7 +31,18 @@ const Posts = () => {
     <section className="posts">
       {posts.length ? <div className="container posts__container">
         {
-          posts.map(({ _id: id, thumbnail, category, title, description, creator, createdAt }) => <PostItem key={id} postID={id} thumbnail={thumbnail} category={category} title={title} description={description} authorID={creator} createdAt={createdAt} />)
+          posts.map(({ _id: id, thumbnail, category, title, description, creator, createdAt }) =>
+            <PostItem
+              key={id}
+              postID={id}
+              thumbnail={thumbnail}
+              category={category}
+              title={title}
+              description={description}
+              authorID={creator}
+              createdAt={createdAt}
+            />
+          )
         }
       </div> : <h2 className='center'>No Posts Found.</h2>}
     </section>

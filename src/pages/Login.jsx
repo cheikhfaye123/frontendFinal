@@ -1,12 +1,12 @@
 import React, { useState, useContext } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import axios from "axios"
-
 import { UserContext } from '../context/userContext'
 
 const Login = () => {
     const [userData, setUserData] = useState({ email: "", password: "" })
     const [error, setError] = useState('')
+    const [isLoading, setIsLoading] = useState(false)
     const navigate = useNavigate()
 
     const { setCurrentUser } = useContext(UserContext)
@@ -20,20 +20,33 @@ const Login = () => {
     const loginUser = async (e) => {
         e.preventDefault();
         setError('')
+        setIsLoading(true)
+
         try {
-            const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/users/login`, userData);
-            const user = await response.data;
+            const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/users/login`,
+                userData,
+                {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }
+            );
+
+            const user = response.data;
             if (!user) {
                 setError("Please check your credentials.")
+                return;
             }
 
             setCurrentUser(user)
             navigate("/")
         } catch (err) {
-            setError(err?.response?.data.message);
+            console.error('Erreur de connexion:', err);
+            setError(err?.response?.data?.message || "Une erreur s'est produite lors de la connexion");
+        } finally {
+            setIsLoading(false)
         }
     }
-
 
     return (
         <section className="login">
@@ -41,9 +54,30 @@ const Login = () => {
                 <h2>Sign In</h2>
                 <form onSubmit={loginUser} className='form login__form'>
                     {error && <p className="form__error-message">{error}</p>}
-                    <input type="email" placeholder='Email' name='email' value={userData.email} onChange={changeHandler} autoFocus />
-                    <input type="password" placeholder='Password' name='password' value={userData.password} onChange={changeHandler} />
-                    <button type="submit" className='btn primary'>Login</button>
+                    <input
+                        type="email"
+                        placeholder='Email'
+                        name='email'
+                        value={userData.email}
+                        onChange={changeHandler}
+                        autoFocus
+                        required
+                    />
+                    <input
+                        type="password"
+                        placeholder='Password'
+                        name='password'
+                        value={userData.password}
+                        onChange={changeHandler}
+                        required
+                    />
+                    <button
+                        type="submit"
+                        className='btn primary'
+                        disabled={isLoading}
+                    >
+                        {isLoading ? 'Connexion...' : 'Login'}
+                    </button>
                 </form>
                 <small>Don't have an account? <Link to="/register">sign up</Link></small>
             </div>
