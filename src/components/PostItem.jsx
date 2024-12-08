@@ -11,7 +11,11 @@ const PostItem = ({ postID, thumbnail, category, title, description, authorID, c
     return (
         <article className="post">
             <div className="post__thumbnail">
-                <img src={`${process.env.REACT_APP_ASSET_URL}/uploads/${thumbnail}`} alt={title} />
+                <img src={`${process.env.REACT_APP_ASSET_URL}/uploads/${thumbnail}`} alt={title}
+                    onError={(e) => {
+                        console.log("Erreur de chargement de l'image:", thumbnail)
+                    }} />
+
             </div>
             <div className="post__content">
                 <Link to={`/posts/${postID}`}>
